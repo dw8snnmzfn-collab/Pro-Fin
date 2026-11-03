@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO FIN</title>
+<style>
+:root {
+  --green: #00ff88;
+  --bg: #080c0b;
+  --panel: #111916;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: white;
+  font-family: Arial, sans-serif;
+}
+header {
+  padding: 22px;
+  text-align: center;
+  background: #101713;
+  border-bottom: 1px solid #244333;
+}
+.logo {
+  color: var(--green);
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+header p { color: #8a9b91; margin-bottom: 0; }
+nav {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  overflow-x: auto;
+  background: #0c110e;
+}
+nav button {
+  flex: 1;
+  min-width: 90px;
+  padding: 12px 8px;
+  border: 1px solid #294536;
+  border-radius: 8px;
+  background: #131c17;
+  color: white;
+  cursor: pointer;
+}
+nav button.active {
+  background: var(--green);
+  color: #00190c;
+  font-weight: bold;
+}
+main {
+  max-width: 650px;
+  margin: 22px auto;
+  padding: 0 15px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid #263a2e;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 15px;
+}
+h2 { font-size: 19px; margin-top: 0; }
+p { color: #b7c7bd; }
+.value {
+  color: var(--green);
+  font-size: 26px;
+  font-weight: bold;
+}
+input[type=range] {
+  width: 100%;
+  accent-color: var(--green);
+  margin: 18px 0;
+  cursor: pointer;
+}
+.action {
+  width: 100%;
+  padding: 13px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--green);
+  color: #00190c;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.action.secondary {
+  background: #1a2920;
+  color: var(--green);
+  border: 1px solid #31523e;
+}
+.status { color: var(--green); }
+.page { display: none; }
+.page.active { display: block; }
+footer {
+  text-align: center;
+  color: #66766c;
+  padding: 22px;
+  font-size: 12px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">⚡ PRO FIN</div>
+  <p>GAMING CONTROL PANEL</p>
+</header>
+
+<nav>
+  <button class="active" data-page="home">หน้าหลัก</button>
+  <button data-page="aim">ลากหัว</button>
+  <button data-page="dark">โหมดดำ</button>
+  <button data-page="settings">ตั้งค่า</button>
+</nav>
+
+<main>
+  <section id="home" class="page active">
+    <div class="card">
+      <h2>⚡ ยินดีต้อนรับสู่ PRO FIN</h2>
+      <p>แผงควบคุมสำหรับทดลองปรับค่าการเล่นเกม</p>
+      <p>สถานะ: <span class="status" id="status">พร้อมใช้งาน</span></p>
+      <button class="action" onclick="toggleDemo()">
+        เปิด / ปิด โหมดจำลอง
+      </button>
+    </div>
+    <div class="card">
+      <h2>🎯 ค่าลากหัว</h2>
+      <div class="value"><span id="homeAim">70</span>%</div>
+      <p>ปรับแต่งค่าได้ในเมนูลากหัว</p>
+      <button class="action secondary" onclick="goPage('aim')">
+        ไปหน้าปรับค่า
+      </button>
+    </div>
+  </section>
+
+  <section id="aim" class="page">
+    <div class="card">
+      <h2>🎯 ปรับค่าลากหัว</h2>
+      <p>ระดับการฝึกเล็ง</p>
+      <div class="value"><span id="aimValue">70</span>%</div>
+      <input id="aim" type="range" min="0" max="100" value="70">
+      <button class="action" onclick="saveSettings()">บันทึกค่า</button>
+    </div>
+    <div class="card">
+      <h2>🎮 ฝึกเล็งจำลอง</h2>
+      <p>กดเป้าหมายเพื่อฝึกความแม่นยำในเว็บ</p>
+      <button class="action secondary" onclick="practice()">
+        <span id="target">🎯 กดเพื่อเริ่มฝึก</span>
+      </button>
+      <p id="score">คะแนน: 0</p>
+    </div>
+  </section>
+
+  <section id="dark" class="page">
+    <div class="card">
+      <h2>🌑 โหมดดำ</h2>
+      <p>เปลี่ยนความสว่างของหน้าตาเว็บไซต์เท่านั้น</p>
+      <button class="action" onclick="toggleDark()">
+        เปิด / ปิด โหมดดำ
+      </button>
+      <p id="darkStatus">โหมดดำ: เปิดอยู่</p>
+    </div>
+  </section>
+
+  <section id="settings" class="page">
+    <div class="card">
+      <h2>⚙️ Sensitivity</h2>
+      <div class="value"><span id="sensValue">50</span></div>
+      <input id="sens" type="range" min="1" max="100" value="50">
+      <button class="action" onclick="saveSettings()">💾 บันทึกการตั้งค่า</button>
+      <button class="action secondary" onclick="resetSettings()">คืนค่าเริ่มต้น</button>
+      <p id="saveStatus"></p>
+    </div>
+    <div class="card">
+      <h2>เกี่ยวกับ PRO FIN</h2>
+      <p>เว็บไซต์เดโม ไม่ได้เชื่อมต่อหรือแก้ไขไฟล์เกม</p>
+    </div>
+  </section>
+</main>
+
+<footer>PRO FIN • DEMO VERSION</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+let demoOn = false;
+let darkOn = true;
+let score = 0;
+
+function goPage(page) {
+  document.querySelectorAll('.page').forEach(el =>
+    el.classList.toggle('active', el.id === page)
+  );
+  document.querySelectorAll('nav button').forEach(el =>
+    el.classList.toggle('active', el.dataset.page === page)
+  );
+}
+
+document.querySelectorAll('nav button').forEach(button => {
+  button.addEventListener('click', () => goPage(button.dataset.page));
+});
+
+$('aim').addEventListener('input', () => {
+  $('aimValue').textContent = $('aim').value;
+  $('homeAim').textContent = $('aim').value;
+});
+
+$('sens').addEventListener('input', () => {
+  $('sensValue').textContent = $('sens').value;
+});
+
+function toggleDemo() {
+  demoOn = !demoOn;
+  $('status').textContent = demoOn ? 'เปิดโหมดจำลองแล้ว' : 'ปิดโหมดจำลองแล้ว';
+}
+
+function toggleDark() {
+  darkOn = !darkOn;
+  document.body.style.background = darkOn ? '#080c0b' : '#202722';
+  $('darkStatus').textContent = 'โหมดดำ: ' + (darkOn ? 'เปิดอยู่' : 'ปิดอยู่');
+}
+
+function saveSettings() {
+  const data = {
+    aim: $('aim').value,
+    sens: $('sens').value
+  };
+  try {
+    localStorage.setItem('profin-settings', JSON.stringify(data));
+    $('saveStatus').textContent = '✅ บันทึกการตั้งค่าแล้ว';
+  } catch (error) {
+    $('saveStatus').textContent = 'ไม่สามารถบันทึกในเบราว์เซอร์นี้ได้';
+  }
+}
+
+function loadSettings() {
+  try {
+    const data = JSON.parse(localStorage.getItem('profin-settings') || '{}');
+    if (data.aim !== undefined) $('aim').value = data.aim;
+    if (data.sens !== undefined) $('sens').value = data.sens;
+  } catch (error) {}
+  $('aimValue').textContent = $('aim').value;
+  $('homeAim').textContent = $('aim').value;
+  $('sensValue').textContent = $('sens').value;
+}
+
+function resetSettings() {
+  $('aim').value = 70;
+  $('sens').value = 50;
+  loadSettings();
+  $('saveStatus').textContent = 'คืนค่าเริ่มต้นแล้ว';
+}
+
+function practice() {
+  score++;
+  $('score').textContent = 'คะแนน: ' + score;
+  $('target').textContent = '🎯 โดนเป้าแล้ว! กดอีกครั้ง';
+}
+
+loadSettings();
+</script>
+</body>
+</html>
